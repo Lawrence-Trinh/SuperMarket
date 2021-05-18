@@ -24,15 +24,6 @@ public class Customer extends User{
 		this.loyaltyPts -= pts;
 	}
 	
-	// if hasCreditCard == false, user will be prompted to create 1 after logging in!
-	public boolean hasCreditCard()
-	{
-		if (creditCard == null)
-			return false;
-		else
-			return true;
-	}
-	
 	public CreditCard getCreditCard()
 	{
 		return creditCard;

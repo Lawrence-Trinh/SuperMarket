@@ -1,23 +1,18 @@
 package model.people;
 
-public class Supplier extends User{
+import java.io.Serializable;
+
+public class Supplier implements Serializable {
 
 	private String supplierCompanyName, supplierContactNo, supplierEmail, supplierLocation;
-
-	public Supplier(String supplierID, String supplierPIN, String supplierFName, String supplierLName,
-			String supplierCompanyName, String supplierContactNo, String supplierEmail, String supplierLocation) {
-		super(supplierID, supplierPIN, supplierFName, supplierLName);
+	
+	public Supplier(String supplierCompanyName, String supplierContactNo, String supplierEmail, String supplierLocation)
+	{
 		this.supplierCompanyName = supplierCompanyName;
 		this.supplierContactNo = supplierContactNo;
 		this.supplierEmail = supplierEmail;
 		this.supplierLocation = supplierLocation;
 	}
-
-//	public Supplier(String supplierID, String supplierCompanyName, String supplierContactNo, String supplierEmail, String supplierLocation) {
-//		super(supplierID);
-//		this.supplierCompanyName
-//	}
-
 
 	public String getSupplierCompanyName() {
 		return supplierCompanyName;
@@ -34,4 +29,23 @@ public class Supplier extends User{
 	public String getSupplierLocation() {
 		return supplierLocation;
 	}
+
+	public void setSupplierCompanyName(String supplierCompanyName) {
+		this.supplierCompanyName = supplierCompanyName;
+	}
+
+	public void setSupplierContactNo(String supplierContactNo) {
+		this.supplierContactNo = supplierContactNo;
+	}
+
+	public void setSupplierEmail(String supplierEmail) {
+		this.supplierEmail = supplierEmail;
+	}
+
+	public void setSupplierLocation(String supplierLocation) {
+		this.supplierLocation = supplierLocation;
+	}
+	
+
+	
 }

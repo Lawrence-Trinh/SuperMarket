@@ -11,7 +11,6 @@ import model.pay.Sale;
 
 public class SalesManager {
 
-	// for manager!
 	public SalesManager()
 	{
 		initialiseSales();
@@ -19,7 +18,6 @@ public class SalesManager {
 	
 	private ArrayList <Sale> sales = new ArrayList<Sale>();
 
-	// iterate through!!!
 	public ArrayList<Sale> getSales() {
 		return sales;
 	}
@@ -52,7 +50,6 @@ public class SalesManager {
 		return null;
 	}
 	
-	// get/search first then remove
 	public void removeSale(Sale sale)
 	{
 		sales.remove(sale);

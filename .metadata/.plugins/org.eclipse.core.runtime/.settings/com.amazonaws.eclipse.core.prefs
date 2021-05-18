@@ -1,0 +1,9 @@
+0091a218-77bb-4870-bdda-0e6fc3372c26\:credentialProfileName=User
+1a01c922-8c1c-4e5f-94f0-b40c6f561fcf\:credentialProfileName=adminuser
+cognitoIdentityId=us-east-1\:d09c6705-a46f-4e89-a167-d5933c6b2409
+cognitoIdentityPoolId=us-east-1\:d4fdc07f-94fd-4cc6-94fb-f903657f05c1
+credentialProfileAccountIds=1a01c922-8c1c-4e5f-94f0-b40c6f561fcf|0091a218-77bb-4870-bdda-0e6fc3372c26
+currentAccount=1a01c922-8c1c-4e5f-94f0-b40c6f561fcf
+currentDefaultAccount=
+ec2PreferencesImported=true
+eclipse.preferences.version=1

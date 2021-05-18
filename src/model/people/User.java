@@ -12,9 +12,6 @@ public abstract class User implements Serializable {
 		this.userFName = userFName;
 		this.userLName = userLName;
 	}
-//	public User(String userID) {
-//		this.userID = userID;
-//	}
 
 	public String getUserID() {
 		return userID;

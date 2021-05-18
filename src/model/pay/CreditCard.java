@@ -1,12 +1,13 @@
 package model.pay;
 
-public class CreditCard {
+import java.io.Serializable;
+
+public class CreditCard implements Serializable{
 
 	private String creditCardID;
 	private String pin;
 	private double balance;
-	private int loyaltyPoints;
-
+	
 	public CreditCard(String creditCardID, String pin) {
 		this.creditCardID = creditCardID;
 		this.pin = pin;
@@ -25,19 +26,11 @@ public class CreditCard {
 		return balance;
 	}
 
-	public double getLoyaltyPoints() {
-		return loyaltyPoints;
-	}
-
-	public void setLoyaltyPoints(int loyaltyPoints) {
-		this.loyaltyPoints = loyaltyPoints;
-	}
-
 	public void addBalance(double topup) {
 		this.balance += topup;
 	}
 
 	public void deductBalance(double deductAmount) {
-		this.balance += deductAmount;
+		this.balance -= deductAmount;
 	}
 }

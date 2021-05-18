@@ -1,8 +1,10 @@
 package model.pay;
 
+import java.io.Serializable;
+
 import model.system.Product;
 
-public class SalesLineItem {
+public class SalesLineItem implements Serializable {
 
 	private int quantity;
 	private Product product;
@@ -57,17 +59,17 @@ public class SalesLineItem {
 	public double getTotalPrice() {
 		if (product.getBulkSalesEligible() == true && quantity >= product.getBulkSalesQty()) {
 			if (this.weightable == true)
-				return (product.getPricePerGram() * weight) * (1 - product.getBulkSalesRate());
+				return (product.getPricePerGram() * weight/100) * (1 - product.getBulkSalesRate());
 			else
 				return (product.getProductPrice() * quantity) * (1 - product.getBulkSalesRate());
 		} else if (product.getDiscountEligible() == true) {
 			if (this.weightable == true)
-				return (product.getPricePerGram() * weight) * (1 - product.getDiscountRate());
+				return (product.getPricePerGram() * weight/100) * (1 - product.getDiscountRate());
 			else
 				return (product.getProductPrice() * quantity) * (1 - product.getDiscountRate());
 		} else
 			if (this.weightable == true)
-				return product.getPricePerGram() * weight;
+				return product.getPricePerGram() * weight/100;
 			else
 				return product.getProductPrice() * quantity;
 	}

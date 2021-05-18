@@ -162,13 +162,22 @@ public class Sale implements Serializable {
 		// deduct product stock
 		for (int i = 0; i < lineItems.size(); i++) {
 			Product tempProduct = lineItems.get(i).getProduct();
-			int quantity = lineItems.get(i).getProductQuantity();
-			tempProduct.reduceStockQty(quantity);
-			if (tempProduct.getStockQty() <= tempProduct.getRestockLvl())
+			if (tempProduct.getWeightable() == false)
 			{
-				tempProduct.restock();
+				int quantity = lineItems.get(i).getProductQuantity();
+				tempProduct.reduceStockQty(quantity);
+				if (tempProduct.getStockQty() <= tempProduct.getRestockLvl())
+				{
+					tempProduct.restock();
+				}
+				tempProduct.addAmountSold(quantity);
 			}
-			tempProduct.addAmountSold(quantity);
+			else
+			{
+				double weight = lineItems.get(i).getWeight();
+				tempProduct.deductStockWeight(weight);
+				tempProduct.addWeightSold(weight);
+				}
 			tempProduct.increaseRevenueGenerated(lineItems.get(i).getTotalPrice());
 		}
 
@@ -192,8 +201,6 @@ public class Sale implements Serializable {
 		sr.addSale(this);
 	}
 
-	// check if paid is true!
-	// if paid is false, null will be returned!
 	public LocalDateTime getTimePaid() {
 		return timePaid;
 	}

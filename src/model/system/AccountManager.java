@@ -11,30 +11,17 @@ import java.util.Iterator;
 import model.people.Customer;
 import model.people.Manager;
 import model.people.SalesStaff;
-import model.people.Supplier;
 import model.people.User;
+import model.people.WarehouseStaff;
 
 public class AccountManager {
 
 	private HashMap<String, Customer> customers = new HashMap<String, Customer>();
 	private HashMap<String, SalesStaff> salesStaffs = new HashMap<String, SalesStaff>();
 	private HashMap<String, Manager> managers = new HashMap<String, Manager>();
-	private HashMap<String, Supplier> suppliers = new HashMap<String, Supplier>();
+	private HashMap<String, WarehouseStaff> warehouseStaffs = new HashMap<String, WarehouseStaff>();
 
 	public AccountManager() {
-		// TODO remove these and have dummy users in the database
-//		Customer c1 = new Customer("C123", "1234", "Alpha", "Bravo");
-//		addCustomer(c1);
-//
-//		Manager m1 = new Manager("M123", "1234", "Charlie", "Delta");
-//		addManager(m1);
-//
-//		SalesStaff s1 = new SalesStaff("S123", "1234", "Echo", "Foxtrot");
-//		addSalesStaff(s1);
-//
-//		Supplier p1 = new Supplier("P123", "1234", "Golf", "Hotel", "CompName", "CompPhone", "CompEmail",
-//				"CompLocation");
-//		addSupplier(p1);
 		initialiseUsers();
 	}
 
@@ -47,6 +34,15 @@ public class AccountManager {
 		}
 	}
 
+	public WarehouseStaff getWarehouseStaff(String id) {
+		if (warehouseStaffs.containsKey(id)) {
+			return warehouseStaffs.get(id);
+		} else {
+			System.out.println("Warehouse Staff " + id + " not found in database!");
+			return null;
+		}
+	}
+	
 	public SalesStaff getSalesStaff(String username) {
 		if (salesStaffs.containsKey(username)) {
 			return salesStaffs.get(username);
@@ -61,15 +57,6 @@ public class AccountManager {
 			return managers.get(username);
 		} else {
 			System.out.println("Manager " + username + " not found in database!");
-			return null;
-		}
-	}
-
-	public Supplier getSupplier(String username) {
-		if (suppliers.containsKey(username)) {
-			return suppliers.get(username);
-		} else {
-			System.out.println("Supplier " + username + " not found in database!");
 			return null;
 		}
 	}
@@ -106,14 +93,14 @@ public class AccountManager {
 			return true;
 		}
 	}
-
-	public boolean addSupplier(Supplier supplier) {
-		String temp = supplier.getUserID();
-		if (suppliers.containsKey(temp)) {
-			System.out.println("Supplier " + temp + " exists in database!");
+	
+	public boolean addWarehouseStaff(WarehouseStaff warehouseStaff) {
+		String temp = warehouseStaff.getUserID();
+		if (warehouseStaffs.containsKey(temp)) {
+			System.out.println("Warehouse Staff " + temp + " exists in database!");
 			return false;
 		} else {
-			suppliers.put(temp, supplier);
+			warehouseStaffs.put(temp, warehouseStaff);
 			return true;
 		}
 	}
@@ -125,6 +112,17 @@ public class AccountManager {
 			return true;
 		} else {
 			System.out.println("Customer " + temp + " doesn't exist in database!");
+			return false;
+		}
+	}
+	
+	public boolean removeWarehouseStaff(WarehouseStaff warehouseStaff) {
+		String temp = warehouseStaff.getUserID();
+		if (warehouseStaffs.containsValue(warehouseStaff)) {
+			warehouseStaffs.remove(temp);
+			return true;
+		} else {
+			System.out.println("Warehouse Staff " + temp + " doesn't exist in database!");
 			return false;
 		}
 	}
@@ -151,48 +149,28 @@ public class AccountManager {
 		}
 	}
 
-	public boolean removeSupplier(String supplierID) {
-		if (suppliers.containsKey(supplierID)) {
-			suppliers.remove(supplierID);
-			System.out.println("Supplier " + supplierID + " removed from the database!");
-			return true;
-		} else {
-			System.out.println("Supplier " + supplierID + " doesn't exist in the database!");
-			return false;
-		}
-	}
-//	public boolean removeSupplier(Supplier supplier) {
-//		String temp = supplier.getUserID();
-//		if (suppliers.containsValue(supplier)) {
-//			suppliers.remove(temp);
-//			return true;
-//		} else {
-//			System.out.println("Supplier " + temp + " doesn't exist in database!");
-//			return false;
-//		}
-//	}
-
+	@SuppressWarnings("unchecked")
 	private void initialiseUsers() {
 		try {
 			FileInputStream fileInCustomer = new FileInputStream("database/customers.ser");
-			FileInputStream fileInSupplier = new FileInputStream("database/suppliers.ser");
+			FileInputStream fileInWarehouseStaff = new FileInputStream("database/warehousestaffs.ser");
 			FileInputStream fileInManager = new FileInputStream("database/managers.ser");
 			FileInputStream fileInSalesStaff = new FileInputStream("database/salesstaffs.ser");
 			ObjectInputStream objectInCustomer = new ObjectInputStream(fileInCustomer);
-			ObjectInputStream objectInSupplier = new ObjectInputStream(fileInSupplier);
+			ObjectInputStream objectInWarehouseStaff = new ObjectInputStream(fileInWarehouseStaff);
 			ObjectInputStream objectInManager = new ObjectInputStream(fileInManager);
 			ObjectInputStream objectInSalesStaff = new ObjectInputStream(fileInSalesStaff);
 			customers = (HashMap<String, Customer>) objectInCustomer.readObject();
-			suppliers = (HashMap<String, Supplier>) objectInSupplier.readObject();
+			warehouseStaffs = (HashMap<String, WarehouseStaff>) objectInWarehouseStaff.readObject();
 			managers = (HashMap<String, Manager>) objectInManager.readObject();
 			salesStaffs = (HashMap<String, SalesStaff>) objectInSalesStaff.readObject();
 			System.out.println("Users are loaded from database!");
 			objectInCustomer.close();
-			objectInSupplier.close();
+			objectInWarehouseStaff.close();
 			objectInManager.close();
 			objectInSalesStaff.close();
 			fileInCustomer.close();
-			fileInSupplier.close();
+			fileInWarehouseStaff.close();
 			fileInManager.close();
 			fileInSalesStaff.close();
 		} catch (IOException i) {
@@ -208,23 +186,23 @@ public class AccountManager {
 	public void saveUsers() {
 		try {
 			FileOutputStream fileOutCustomer = new FileOutputStream("database/customers.ser");
-			FileOutputStream fileOutSupplier = new FileOutputStream("database/suppliers.ser");
+			FileOutputStream fileOutWarehouseStaff = new FileOutputStream("database/warehousestaffs.ser");
 			FileOutputStream fileOutManager = new FileOutputStream("database/managers.ser");
 			FileOutputStream fileOutSalesStaff = new FileOutputStream("database/salesstaffs.ser");
 			ObjectOutputStream objectOutCustomer = new ObjectOutputStream(fileOutCustomer);
-			ObjectOutputStream objectOutSupplier = new ObjectOutputStream(fileOutSupplier);
+			ObjectOutputStream objectOutWarehouseStaff = new ObjectOutputStream(fileOutWarehouseStaff);
 			ObjectOutputStream objectOutManager = new ObjectOutputStream(fileOutManager);
 			ObjectOutputStream objectOutSalesStaff = new ObjectOutputStream(fileOutSalesStaff);
 			objectOutCustomer.writeObject(customers);
-			objectOutSupplier.writeObject(suppliers);
+			objectOutWarehouseStaff.writeObject(warehouseStaffs);
 			objectOutManager.writeObject(managers);
 			objectOutSalesStaff.writeObject(salesStaffs);
 			objectOutCustomer.close();
-			objectOutSupplier.close();
+			objectOutWarehouseStaff.close();
 			objectOutManager.close();
 			objectOutSalesStaff.close();
 			fileOutCustomer.close();
-			fileOutSupplier.close();
+			fileOutWarehouseStaff.close();
 			fileOutManager.close();
 			fileOutSalesStaff.close();
 			System.out.println("Users are saved to database!");
@@ -238,7 +216,7 @@ public class AccountManager {
 		customers = new HashMap<String, Customer>();
 		salesStaffs = new HashMap<String, SalesStaff>();
 		managers = new HashMap<String, Manager>();
-		suppliers = new HashMap<String, Supplier>();
+		warehouseStaffs = new HashMap<String, WarehouseStaff>();
 		System.out.println("Users reset!");
 	}
 
@@ -270,11 +248,11 @@ public class AccountManager {
 	}
 	
 	// Print registered suppliers in .ser file
-		public void printSuppliers() {
-			Iterator iterator = suppliers.entrySet().iterator();
+		public void printWarehouseStaffs() {
+			Iterator iterator = warehouseStaffs.entrySet().iterator();
 			while (iterator.hasNext()) {
 				HashMap.Entry pair = (HashMap.Entry) iterator.next();
-				System.out.println(pair.getKey() + " = " + getSupplier(pair.getKey().toString()).getUserPIN());
+				System.out.println(pair.getKey() + " = " + getWarehouseStaff(pair.getKey().toString()).getUserPIN());
 			}
 		}
 
@@ -283,14 +261,14 @@ public class AccountManager {
 		System.out.println("Customers: " + customers.size());
 		System.out.println("SalesStaffs: " + salesStaffs.size());
 		System.out.println("Managers: " + managers.size());
+		System.out.println("Warehouse Staffs: " + warehouseStaffs.size());
 	}
 	
 	public User verify(String username, String pin)
 	{
-		username = username.toUpperCase();
 		switch (username.charAt(0)) {
 		// Manager Login
-		case 'M':
+		case 'm':
 			if (getManager(username) != null) {
 				if (getManager(username).getUserPIN().equals(pin)) {
 					return getManager(username);
@@ -299,7 +277,7 @@ public class AccountManager {
 
 			break;
 		// SalesStaff Login
-		case 'S':
+		case 's':
 			if (getSalesStaff(username) != null) {
 				if (getSalesStaff(username).getUserPIN().equals(pin)) {
 					return getSalesStaff(username);
@@ -307,7 +285,7 @@ public class AccountManager {
 			}
 			break;
 		// Customer Login
-		case 'C':
+		case 'c':
 
 			if (getCustomer(username) != null) {
 				if (getCustomer(username).getUserPIN().equals(pin)) {
@@ -315,48 +293,17 @@ public class AccountManager {
 				}
 			}
 			break;
-		// Supplier Login
-		case 'P':
-			if (getSupplier(username) != null) {
-				if (getSupplier(username).getUserPIN().equals(pin)) {
-					return getSupplier(username);
+		case 'w':
+	
+			if (getWarehouseStaff(username) != null) {
+				if (getWarehouseStaff(username).getUserPIN().equals(pin)) {
+					return getWarehouseStaff(username);
 				}
 			}
-
 			break;
 		}
 		return null;
 		
-		// USAGE!
-//		User user = am.verify(userName, pin);
-//		if (user == null)
-//		{
-//			System.out.println("Login failed! Please try again.");
-//			sc.nextLine();
-//			displayMainMenu();
-//			return;
-//		}
-//		if (user instanceof Manager)
-//		{
-//			System.out.println("Welcome Manager " + user.getUserID());
-//		}
-//		else if (user instanceof SalesStaff)
-//		{
-//			System.out.println("Welcome Staff " + user.getUserID());
-//		}
-//		else if (user instanceof Supplier)
-//		{
-//			System.out.println("Welcome Supplier " + user.getUserID());
-//		}
-//		else if (user instanceof Customer)
-//		{
-//			System.out.println("Welcome Customer " + user.getUserID());
-//			Sale sale = new Sale((Customer) user);
-//			customerView((Customer) user, sale);
-//		}
-		
 	}
-	
-//	
 
 }

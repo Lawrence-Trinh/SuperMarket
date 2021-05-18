@@ -16,7 +16,7 @@ public class ProductManager {
 		initialiseProducts();
 	}
 
-	public void initialiseProducts() {
+	private void initialiseProducts() {
 		try {
 			FileInputStream fileIn = new FileInputStream("database/products.ser");
 			ObjectInputStream objectIn = new ObjectInputStream(fileIn);
@@ -79,6 +79,19 @@ public class ProductManager {
 		}
 	}
 	
+	public Product getProductByName(String productName) {
+		for (Product product : products.values()) {
+			if (product.getProductName().equalsIgnoreCase(productName))
+			{
+				return product;
+			} else {
+				System.out.println("Product " + productName + " doesn't exist in database!");
+				// UI Verification!
+			}
+		}
+		return null;
+	}
+	
 	public String getProductID(String name) {
 		Iterator iterator = products.entrySet().iterator();
 		while (iterator.hasNext()) {
@@ -86,16 +99,6 @@ public class ProductManager {
 	        if (getProduct(pair.getKey().toString()).getProductName().toLowerCase().equals(name.toLowerCase())) {
 	        	return pair.getKey().toString();
 	        }
-		}
-		return null;
-	}
-	
-	public Product getProductByName(String productName) {
-		for (Product product : products.values()) {
-			if (product.getProductName().equalsIgnoreCase(productName))
-			{
-				return product;
-			} 
 		}
 		return null;
 	}
@@ -115,7 +118,7 @@ public class ProductManager {
 		Iterator iterator = products.entrySet().iterator();
 		while (iterator.hasNext()) {
 			HashMap.Entry pair = (HashMap.Entry)iterator.next();
-	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	        System.out.println(pair.getValue());
 		}
 	}
 

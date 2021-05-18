@@ -4,24 +4,19 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import model.people.Supplier;
+
 public class Product implements Serializable {
 
-	// manages product details, manager can modify most, supplier modifies quantity
-	// productLoad and productSave not implemented yet! (product.txt read/write)
-	// product array can be stored in SupportSystem..?
 
-	// TODO
-
-	private String productName;
-	private int stockQty;
+	private String productName;	
 	private String productID;
 	private double productPrice;
-	private int amountSold;
+	private int amountSold = 0;
+	private double weightSold = 0;
 	private int totalQtyRestocked = 0;
 	private double revenueGenerated = 0;
 	
-
-	// to be overwritten by methods
 	private boolean discountEligible = false;
 	private double discountRate = 0;
 	private double discountedPrice = 0;
@@ -29,24 +24,35 @@ public class Product implements Serializable {
 	private boolean bulkSalesEligible = false;
 	private int bulkSalesQty = 0;
 	private double bulkSalesRate = 0;
+	
+	private Supplier supplier;
+	
 	private boolean weightable = false;
+	
 	private double pricePerGram = 0;
-
+	private double stockWeight = 0; // product weight available in warehouse
+	
+	private int stockQty;
+	
 	private int restockLvl = 0;
 	private int reorderQty = 0;
 
 	private static NumberFormat formatter = new DecimalFormat("#0.00");
 
+	
 	public Product(String productID, String productName, double productPrice, int stockQty) {
 		this.productName = productName;
 		this.stockQty = stockQty;
 		this.productID = productID;
 		this.productPrice = productPrice;
-		// product name is ID, quantitySold is written to sales.txt and read from there
 	}
-
-	public void setProductName(String name) {
-		this.productName = name;
+	
+	
+	public Product(String productID, String productName, double pricePerGram, double stockWeight) {
+		this.productName = productName;
+		this.stockWeight = stockWeight;
+		this.productID = productID;
+		this.setWeightable(pricePerGram);
 	}
 
 	public String getProductName() {
@@ -98,7 +104,6 @@ public class Product implements Serializable {
 	}
 
 	public void setDiscountedPrice(double discountPercentage) {
-//		this.discountedPrice = discountPercentage;
 		double price = this.getProductPrice();
 		this.discountRate = discountPercentage;
 		double total = 0;
@@ -149,6 +154,12 @@ public class Product implements Serializable {
 	public void setRestockLvl(int restockLvl) {
 		this.restockLvl = restockLvl;
 	}
+	
+	public double getStockWeight() {
+		return stockWeight;
+	}
+	
+	
 
 	public int getRestockLvl() {
 		return restockLvl;
@@ -183,10 +194,36 @@ public class Product implements Serializable {
 		return revenueGenerated;
 	}
 
+	// for auto restock
 	public void restock()
 	{
 		addStockQty(reorderQty); 
 		totalQtyRestocked += reorderQty;
+	}
+	
+	public void addStockWeight(double stockweight)
+	{
+		this.stockWeight += stockweight;
+	}
+	
+	public void deductStockWeight(double stockweight)
+	{
+		this.stockWeight -= stockweight;
+	}
+	
+	public void addWeightSold(double weightSold)
+	{
+		this.weightSold += weightSold;
+	}
+	
+	public Supplier getSupplier()
+	{
+		return supplier;
+	}
+	
+	public void setSupplier(Supplier supplier)
+	{
+		this.supplier = supplier;
 	}
 	
 	@Override
